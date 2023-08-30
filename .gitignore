@@ -168,3 +168,5 @@ dags
 hdfs/*
 
 *.jar
+hadoop/*
+credentials.json

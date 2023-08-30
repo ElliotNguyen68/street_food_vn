@@ -7,6 +7,7 @@ Vietnam food travel
 exotic Vietnamese food
 street food Hanoi
 best Vietnamese street food
+vietnam night street food
 street food Saigon
 street food Da Lat
 street food Phu Quoc
@@ -18,3 +19,5 @@ street food Cao Bang
 street food Can Tho
 street food Vung Tau
 street food Mekong
+street food Da Nang
+street food Nha Trang
