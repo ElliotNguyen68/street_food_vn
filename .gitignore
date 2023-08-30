@@ -170,3 +170,7 @@ hdfs/*
 *.jar
 hadoop/*
 credentials.json
+
+
+*.tar
+*.pth
