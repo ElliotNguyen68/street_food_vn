@@ -174,3 +174,6 @@ credentials.json
 
 *.tar
 *.pth
+
+.vscode
+metadata/
