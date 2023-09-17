@@ -4,7 +4,6 @@ import torchvision
 import numpy as np
 from loguru import logger
 
-
 from src.feature_extraction.scenes150.mit_semseg.models import ModelBuilder,SegmentationModule
 from src.feature_extraction.scenes150.mit_semseg.utils import colorEncode
 
@@ -34,7 +33,6 @@ def extract_feature(
     image_path:str,
     cuda:bool=False
 ):
-   
     segmentation_module.eval()
     if cuda:
         segmentation_module.to(torch.device('cuda:0'))
@@ -48,6 +46,7 @@ def extract_feature(
             mean=[0.485, 0.456, 0.406], # These are RGB mean+std values
             std=[0.229, 0.224, 0.225])  # across a large photo dataset.
     ])
+
     pil_image = PIL.Image.open(image_path).convert('RGB')
     # img_original = np.array(pil_image)
     img_data = pil_to_tensor(pil_image)
@@ -56,9 +55,11 @@ def extract_feature(
     else: 
         singleton_batch = {'img_data': img_data[None]}
     output_size = img_data.shape[1:]
+    logger.info('')
 
     # Run the segmentation at the highest resolution.
     with torch.no_grad():
+        #this line take time
         scores = segmentation_module(singleton_batch, segSize=output_size)
     
     _, pred = torch.max(scores, dim=1)
@@ -67,8 +68,8 @@ def extract_feature(
     counts=counts.astype('float64')
     num_pixel=pred.shape[0]*pred.shape[1]*pred.shape[2]
     logger.info(pred.shape)
-    print(counts.sum())
-    print(num_pixel)
+    # print(counts.sum())
+    # print(num_pixel)
     counts/=num_pixel
 
     return {
