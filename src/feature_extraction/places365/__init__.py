@@ -20,7 +20,7 @@ def hook_feature(module, input, output):
 
 
 
-def load_model(model_path:str="../models/places365"):
+def load_model(model_path:str="../models/model/places365"):
     # this model has a last conv feature map as 14x14
 
     model_file = '{}/wideresnet18_places365.pth.tar'.format(model_path)
@@ -62,7 +62,7 @@ def load_model(model_path:str="../models/places365"):
 
 
 
-def init_module(label_path:str)->Tuple:
+def init_module(model_path:str,label_path:str)->Tuple:
         
     # load the labels
     classes, labels_IO, labels_attribute, W_attribute = resnet18_365.load_labels(label_path)
@@ -70,7 +70,7 @@ def init_module(label_path:str)->Tuple:
     # load the model
 
     
-    model = load_model()
+    model = load_model(model_path=model_path)
 
     # load the transformer
     tf = resnet18_365.returnTF() # image transformer
@@ -82,7 +82,7 @@ def init_module(label_path:str)->Tuple:
 
     return classes,labels_IO,labels_attribute,W_attribute,model,tf
 
-def extract_feature(image_path:str,classes,labels_IO,labels_attribute,W_attribute,model,tf)->Tuple[float,List[float],List[str]]:
+def extract_feature(image_path:str,classes,labels_IO,labels_attribute,W_attribute,model,tf,get_top_only:int=20)->Tuple[float,List[float],List[str]]:
     features_blobs = []
     
     img = Image.open(image_path)
@@ -116,10 +116,13 @@ def extract_feature(image_path:str,classes,labels_IO,labels_attribute,W_attribut
     # scences_attributes=[labels_attribute[idx_a[i]] for i in range(-1,-10,-1)]
     # logger.info(', '.join(scences_attributes))
 
+
+
     return (
         io_image,
-        probs.tolist(),
-        None
+        {
+            key:value for key,value in zip(idx[:get_top_only],probs[:get_top_only])
+        },
     )
     
 # classes, labels_IO, labels_attribute, W_attribute = load_labels()
