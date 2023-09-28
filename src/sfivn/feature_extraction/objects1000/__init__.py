@@ -4,10 +4,11 @@ import torch
 from PIL import Image
 from torchvision import transforms
 
+import sfivn
 
 def init_module(
     model_path:str,
-    torchvision_repo_dir:str
+    torchvision_repo_dir:str = '{}/{}'.format(sfivn.__file__,'models/pytorch_vision')
 ):
     model=torch.hub.load(source='local',repo_or_dir=torchvision_repo_dir,model='inception_v3')
 

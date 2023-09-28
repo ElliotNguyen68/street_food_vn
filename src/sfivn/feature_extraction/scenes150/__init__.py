@@ -4,8 +4,8 @@ import torchvision
 import numpy as np
 from loguru import logger
 
-from src.feature_extraction.scenes150.mit_semseg.models import ModelBuilder,SegmentationModule
-from src.feature_extraction.scenes150.mit_semseg.utils import colorEncode
+from sfivn.feature_extraction.scenes150.mit_semseg.models import ModelBuilder,SegmentationModule
+from sfivn.feature_extraction.scenes150.mit_semseg.utils import colorEncode
 
 
 def init_module(model_path:str=''):

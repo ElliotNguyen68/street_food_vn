@@ -9,8 +9,9 @@ from torch.nn import functional as F
 from PIL import Image
 from loguru import logger
 
-from src.feature_extraction.places365 import resnet18_365
-from src.feature_extraction.places365 import wideresnet
+from sfivn.feature_extraction.places365 import resnet18_365
+from sfivn.feature_extraction.places365 import wideresnet
+import sfivn
 
 features_blobs=[]
 
@@ -62,7 +63,7 @@ def load_model(model_path:str="../models/model/places365"):
 
 
 
-def init_module(model_path:str,label_path:str)->Tuple:
+def init_module(model_path:str,label_path:str='{}/{}'.format(sfivn.__file__,'models/model_metadata/places365'))->Tuple:
         
     # load the labels
     classes, labels_IO, labels_attribute, W_attribute = resnet18_365.load_labels(label_path)
