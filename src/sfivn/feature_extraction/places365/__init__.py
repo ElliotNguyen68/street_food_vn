@@ -63,7 +63,7 @@ def load_model(model_path:str="../models/model/places365"):
 
 
 
-def init_module(model_path:str,label_path:str='{}/{}'.format(sfivn.__file__,'models/model_metadata/places365'))->Tuple:
+def init_module(model_path:str,label_path:str='{}/{}'.format('/'.join(sfivn.__file__.split('/')[:-1]),'models/model_metadata/places365'))->Tuple:
         
     # load the labels
     classes, labels_IO, labels_attribute, W_attribute = resnet18_365.load_labels(label_path)

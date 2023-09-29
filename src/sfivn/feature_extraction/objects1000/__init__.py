@@ -8,7 +8,7 @@ import sfivn
 
 def init_module(
     model_path:str,
-    torchvision_repo_dir:str = '{}/{}'.format(sfivn.__file__,'models/pytorch_vision')
+    torchvision_repo_dir:str = '{}/{}'.format('/'.join(sfivn.__file__.split('/')[:-1]),'models/pytorch_vision')
 ):
     model=torch.hub.load(source='local',repo_or_dir=torchvision_repo_dir,model='inception_v3')
 
