@@ -68,6 +68,10 @@ def split_video_to_images(
     # Read and save frames at the specified interval
     frame_count = 0
     logger.info("start extract frames")
+    image_base_path='{}'.format(output_images_directory)
+    if separate_by_video_name:
+        image_base_path+= '/{}'.format(video_id)
+    no_actual_frames=0
     while True:
         # Read the next frame
         success, frame = video.read()
@@ -79,12 +83,10 @@ def split_video_to_images(
         # Save the frame as an image
         if frame_count % frame_interval == 0:
             image_path = (
-                f"{output_images_directory}/frame_{frame_count}.jpg"
-                if not separate_by_video_name
-                else f"{output_images_directory}/{video_id}/frame_{frame_count}.jpg"
+                image_base_path+f"/frame_{no_actual_frames}.jpg"
             )
             cv2.imwrite(image_path, frame)
-
+            no_actual_frames+=1
         frame_count += 1
     logger.info("Num frames in {} video = {}".format(image_path, frame_count))
 
