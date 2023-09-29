@@ -8,7 +8,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from .utils import load_url
-from src.feature_extraction.scenes150.mit_semseg.lib.nn import SynchronizedBatchNorm2d
+from sfivn.feature_extraction.scenes150.mit_semseg.lib.nn import SynchronizedBatchNorm2d
 
 BatchNorm2d = SynchronizedBatchNorm2d
 BN_MOMENTUM = 0.1

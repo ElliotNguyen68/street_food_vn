@@ -1,7 +1,7 @@
 import torch.nn as nn
 import math
 from .utils import load_url
-from src.feature_extraction.scenes150.mit_semseg.lib.nn import SynchronizedBatchNorm2d
+from sfivn.feature_extraction.scenes150.mit_semseg.lib.nn import SynchronizedBatchNorm2d
 BatchNorm2d = SynchronizedBatchNorm2d
 
 

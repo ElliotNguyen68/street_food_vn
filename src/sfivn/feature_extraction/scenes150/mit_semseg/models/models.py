@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from . import resnet, resnext, mobilenet, hrnet
-from src.feature_extraction.scenes150.mit_semseg.lib.nn import SynchronizedBatchNorm2d
+from sfivn.feature_extraction.scenes150.mit_semseg.lib.nn import SynchronizedBatchNorm2d
 BatchNorm2d = SynchronizedBatchNorm2d
 
 
