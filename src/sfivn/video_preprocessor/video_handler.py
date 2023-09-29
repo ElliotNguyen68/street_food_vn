@@ -1,12 +1,22 @@
 import os
 import math
+import shutil
 
 import cv2
 from pytube import YouTube
 from loguru import logger
 
 
-def download_video(video_id: str, output_dir: str = "../data/videos"):
+def download_video(video_id: str, output_dir: str = "../data/videos")-> str:
+    """
+
+    Args:
+        video_id (str): _description_
+        output_dir (str, optional): _description_. Defaults to "../data/videos".
+
+    Returns:
+        str: name of file 
+    """
     try:
         yt = YouTube("http://youtube.com/watch?v={}".format(video_id))
         stream = (
@@ -22,6 +32,7 @@ def download_video(video_id: str, output_dir: str = "../data/videos"):
             "{}/{}".format(output_dir, stream.default_filename),
             "{}/{}.mp4".format(output_dir, video_id),
         )
+        return stream.default_filename 
     except Exception as e:
         logger.debug(e)
         pass
@@ -35,6 +46,7 @@ def split_video_to_images(
 
     # Open the video file
     video = cv2.VideoCapture(video_path)
+    logger.info('Done open video')
 
     # Get the frames per second (fps) of the video
     fps = video.get(cv2.CAP_PROP_FPS)
@@ -47,6 +59,7 @@ def split_video_to_images(
 
     # Read and save frames at the specified interval
     frame_count = 0
+    logger.info('start extract frames')
     while True:
         # Read the next frame
         success, frame = video.read()
@@ -64,3 +77,31 @@ def split_video_to_images(
 
     # Release the video capture object
     video.release()
+
+
+def framing_video_base_on_video_id(
+    id:str,
+    frames_output_dir:str,
+    num_sec_per_frame:int=1,
+    remove_video_after_framings:bool=True
+):
+    name_video=download_video(
+        video_id=id,
+        output_dir=frames_output_dir+'_video', 
+    )
+
+    split_video_to_images(
+        video_path=frames_output_dir+'_video'+'/{}'.format(name_video),
+        num_sec_per_image=num_sec_per_frame,
+        output_images_directory=frames_output_dir+'_frames'
+    )
+    
+    if remove_video_after_framings:
+        shutil.rmtree(frames_output_dir+'_video')
+        
+    
+    
+    
+    
+    
+     
