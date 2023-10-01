@@ -21,7 +21,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     package_dir={"": "src"},
-    package_data={"": ["*.txt"]},
+    package_data={"": ["*.txt","*.npy"]},
     packages=setuptools.find_packages(where="src"),
     python_requires=">=3.5",
     install_requires=required

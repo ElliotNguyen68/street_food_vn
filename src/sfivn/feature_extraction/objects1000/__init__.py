@@ -3,6 +3,7 @@ import os
 import torch
 from PIL import Image
 from torchvision import transforms
+from loguru import logger
 
 import sfivn
 
