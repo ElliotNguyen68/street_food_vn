@@ -101,9 +101,9 @@ def split_video_to_images(
         # Save the frame as an image
         if frame_count % frame_interval == 0:
             image_path = image_base_path + f"/frame_{no_actual_frames}.jpg"
-            logger.info('')
             cv2.imwrite(image_path, frame)
             no_actual_frames += 1
+            logger.info(no_actual_frames)
         frame_count += 1
     logger.info("Num frames in {} video = {}".format(video_path, no_actual_frames))
 
