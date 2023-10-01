@@ -109,7 +109,7 @@ def split_video_to_images(
     # Release the video capture object
     video.release()
 
-    return frame_count
+    return no_actual_frames
 
 
 def framing_video_base_on_video_id(
@@ -117,7 +117,7 @@ def framing_video_base_on_video_id(
     frames_output_dir: str,
     sec_per_frame: int = 1,
     remove_video_after_framings: bool = True,
-):
+)->int:
     name_video = download_video(
         video_id=id,
         output_dir=frames_output_dir + "_video",
