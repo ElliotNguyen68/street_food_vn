@@ -104,7 +104,7 @@ def split_video_to_images(
             cv2.imwrite(image_path, frame)
             no_actual_frames += 1
         frame_count += 1
-    logger.info("Num frames in {} video = {}".format(video_path, frame_count))
+    logger.info("Num frames in {} video = {}".format(video_path, no_actual_frames))
 
     # Release the video capture object
     video.release()
