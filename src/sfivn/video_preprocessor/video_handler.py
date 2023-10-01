@@ -136,14 +136,14 @@ def framing_video_base_on_video_id(
 
 
 def video_extract_base_on_id(
-    id: str,
-    sec_per_frames: int,
+    video_id: str,
     frames_output_dir: str,
     module: Any,
+    sec_per_frames: 1,
     *args,
 ):
     num_frames_in_video = framing_video_base_on_video_id(
-        id=id, sec_per_frames=sec_per_frames
+        id=video_id, sec_per_frames=sec_per_frames
     )
 
     base_dir = frames_output_dir + "_frames"
