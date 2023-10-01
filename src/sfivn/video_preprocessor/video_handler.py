@@ -141,7 +141,7 @@ def video_extract_base_on_id(
     module:Any,
     get_top:int=20,
     *args
-)-> :
+):
     num_frames_in_video=framing_video_base_on_video_id(id=id,sec_per_frames=sec_per_frames)
     
     base_dir=frames_output_dir+'_frames'
