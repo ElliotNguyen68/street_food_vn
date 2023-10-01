@@ -125,13 +125,13 @@ def framing_video_base_on_video_id(
 
     num_frames_extracted = split_video_to_images(
         video_path=frames_output_dir + "_video" + "/{}".format(name_video),
-        num_sec_per_image=num_sec_per_frame,
+        num_sec_per_image=sec_per_frame,
         output_images_directory=frames_output_dir + "_frames",
     )
-
+ 
     if remove_video_after_framings:
         shutil.rmtree(frames_output_dir + "_video")
-
+     
     return num_frames_extracted
 
 
@@ -150,5 +150,5 @@ def video_extract_base_on_id(
     base_dir = frames_output_dir + "_frames"
     for frame_no in num_frames_in_video:
         image_path = base_dir + "/frames_{}".format(frame_no)
-
+        
         value = module.extract_feature(image_path)
