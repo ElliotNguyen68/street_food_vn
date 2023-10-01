@@ -43,11 +43,27 @@ def split_video_to_images(
     output_images_directory: str,
     num_sec_per_image: int = 1,
     separate_by_video_name: bool = True,
-):
+)->int:
+    """_summary_
+
+    Args:
+        video_path (str): _description_
+        output_images_directory (str): _description_
+        num_sec_per_image (int, optional): _description_. Defaults to 1.
+        separate_by_video_name (bool, optional): _description_. Defaults to True.
+
+    Returns:
+        int: number of frames
+    """
     video_id=video_path.split('/')[-1]
     if os.path.exists(output_images_directory) == False:
         os.mkdir(output_images_directory)
     if separate_by_video_name:
+        try:
+            # remove if exist folder for this video
+            shutil.rmtree(output_images_directory+'/{}'.format(video_id))
+        except Exception as e:
+            logger.debug(e)
         if os.path.exists(output_images_directory+'/{}'.format(video_id))==False:
             logger.info('mkdir sep')
             os.mkdir(output_images_directory+'/{}'.format(video_id))
@@ -92,12 +108,14 @@ def split_video_to_images(
 
     # Release the video capture object
     video.release()
+    
+    return frame_count
 
 
 def framing_video_base_on_video_id(
     id: str,
     frames_output_dir: str,
-    num_sec_per_frame: int = 1,
+    sec_per_frame: int = 1,
     remove_video_after_framings: bool = True,
 ):
     name_video = download_video(
@@ -105,7 +123,7 @@ def framing_video_base_on_video_id(
         output_dir=frames_output_dir + "_video",
     )
 
-    split_video_to_images(
+    num_frames_extracted=split_video_to_images(
         video_path=frames_output_dir + "_video" + "/{}".format(name_video),
         num_sec_per_image=num_sec_per_frame,
         output_images_directory=frames_output_dir + "_frames",
@@ -113,3 +131,23 @@ def framing_video_base_on_video_id(
 
     if remove_video_after_framings:
         shutil.rmtree(frames_output_dir + "_video")
+    
+    return num_frames_extracted
+
+def video_extract_base_on_id(
+    id:str,
+    sec_per_frames:int,
+    frames_output_dir:str,
+    module:Any,
+    get_top:int=20,
+    *args
+)-> :
+    num_frames_in_video=framing_video_base_on_video_id(id=id,sec_per_frames=sec_per_frames)
+    
+    base_dir=frames_output_dir+'_frames'
+    for frame_no in num_frames_in_video:
+        image_path=base_dir+'/frames_{}'.format(frame_no)
+        
+        value=module.extract_feature(image_path)
+    
+    
