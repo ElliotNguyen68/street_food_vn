@@ -140,7 +140,6 @@ def video_extract_base_on_id(
     sec_per_frames: int,
     frames_output_dir: str,
     module: Any,
-    get_top: int = 20,
     *args,
 ):
     num_frames_in_video = framing_video_base_on_video_id(
@@ -151,4 +150,4 @@ def video_extract_base_on_id(
     for frame_no in num_frames_in_video:
         image_path = base_dir + "/frames_{}".format(frame_no)
         
-        value = module.extract_feature(image_path)
+        value = module.extract_feature(image_path,*args)
