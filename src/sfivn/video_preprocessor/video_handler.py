@@ -3,6 +3,7 @@ import math
 import shutil
 from typing import Any, Callable
 import re
+from multiprocessing import Pool, Manager
 
 
 import cv2
@@ -10,6 +11,7 @@ from pytube import YouTube
 from loguru import logger
 import pandas as pd
 
+FEATURE_COL='feature_type'
 
 def download_video(video_id: str, output_dir: str = "../data/videos") -> str:
     """
@@ -149,6 +151,62 @@ def check_video_already_framming(video_id: str, frames_output_dir: str):
     # if any filename not in format -> false
     return all(bool(re.search("^frame_[0-9]*\.jpg$", file_name)) for file_name in all_files)
 
+def video_extract_base_on_id_multiprocess(
+    video_id: str,
+    frames_output_dir: str,
+    extract_function: Callable,
+    feature:str,
+    sec_per_frame: int = 1,
+    n_jobs:int=1
+):
+    def func_extract_multiprocess(x):
+        frame_id=x.split('/')[-1]
+        feature=extract_function(x)
+        dict_proxy[frame_id] = feature
+       
+    manager=Manager()
+    dict_proxy=manager.dict()
+     
+    exist_frames=check_video_already_framming(
+        video_id=video_id,
+        frames_output_dir=frames_output_dir
+    )
+    if not exist_frames:
+        logger.info("Need framing this video")
+        # framing video base on id
+        num_frames_in_video = framing_video_base_on_video_id(
+            id=video_id, sec_per_frame=sec_per_frame, frames_output_dir=frames_output_dir
+        )
+    else:
+        logger.info('Already have video framed')
+        num_frames_in_video=len(
+            os.listdir(
+               "{}_frames/{}".format(frames_output_dir, video_id) 
+            )
+        )
+    base_dir = frames_output_dir + "_frames"
+    list_frames_path=[
+       base_dir + "/{}/frame_{}.jpg".format(
+            video_id,
+            frame_no,
+        )
+       for frame_no in range(num_frames_in_video) 
+    ]     
+    with Pool(processes=n_jobs) as p:
+        p.apply(func_extract_multiprocess,list_frames_path)
+    
+    dict_mapping=dict(dict_proxy)
+    
+    mapping_frame_id=[]
+    mapping_feature=[]
+    for key,value in zip(dict_mapping.keys(),dict_mapping.values()):
+        mapping_frame_id.append(key)
+        mapping_feature.append(value)
+    
+    df_result=pd.DataFrame({"frame_no": mapping_frame_id, "features": mapping_feature}) 
+    df_result[FEATURE_COL]=feature
+    
+    return df_result
 
 def video_extract_base_on_id(
     video_id: str,
@@ -191,6 +249,6 @@ def video_extract_base_on_id(
         list_frames.append("{}_{}".format(video_id, frame_no))
 
     df_result=pd.DataFrame({"frame_no": list_frames, "features": list_features})
-    df_result['feature_type']=feature
+    df_result[FEATURE_COL]=feature
     
     return df_result
