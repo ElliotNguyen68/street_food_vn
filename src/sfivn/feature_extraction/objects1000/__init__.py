@@ -52,7 +52,7 @@ def extract_feature(
     probabilities = torch.nn.functional.softmax(output[0], dim=0)
 
     probs, idx = probabilities.sort(0, True)
-    logger.info('{}, {}'.format(', '.join(probs[:5].values),', '.join(idx[:5].values)))
+    logger.info("{}, {}".format(probs[:5].tolist()), idx[:5].tolist())
     return {
         key.item(): value.item()
         for key, value in zip(idx[:get_top_only], probs[:get_top_only])
