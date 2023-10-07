@@ -1,7 +1,7 @@
 import os
 import math
 import shutil
-from typing import Any
+from typing import Any,Callable
 
 
 import cv2
@@ -139,7 +139,7 @@ def framing_video_base_on_video_id(
 def video_extract_base_on_id(
     video_id: str,
     frames_output_dir: str,
-    module: Any,
+    extract_function: Callable,
     sec_per_frames: 1,
     *args
 )->pd.DataFrame:
@@ -153,7 +153,7 @@ def video_extract_base_on_id(
     for frame_no in num_frames_in_video:
         image_path = base_dir + "/frames_{}".format(frame_no)
         
-        value = module.extract_feature(image_path,*args)
+        value = extract_function(image_path)
         list_features.append(value)
         list_frames.append('{}_{}'.format(video_id,frame_no))
         
