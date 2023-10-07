@@ -7,6 +7,7 @@ from typing import Any
 import cv2
 from pytube import YouTube
 from loguru import logger
+import pandas as pd
 
 
 def download_video(video_id: str, output_dir: str = "../data/videos") -> str:
@@ -141,13 +142,27 @@ def video_extract_base_on_id(
     module: Any,
     sec_per_frames: 1,
     *args
-):
+)->pd.DataFrame:
     num_frames_in_video = framing_video_base_on_video_id(
         id=video_id, sec_per_frames=sec_per_frames
     )
 
     base_dir = frames_output_dir + "_frames"
+    list_features=[]
+    list_frames=[]
     for frame_no in num_frames_in_video:
         image_path = base_dir + "/frames_{}".format(frame_no)
         
         value = module.extract_feature(image_path,*args)
+        list_features.append(value)
+        list_frames.append('{}_{}'.format(video_id,frame_no))
+        
+    return pd.DataFrame(
+        {
+            'frame_no':list_frames,
+            'features':list_features
+        }
+    )
+        
+    
+        
