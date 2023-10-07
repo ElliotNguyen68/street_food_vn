@@ -139,7 +139,7 @@ def framing_video_base_on_video_id(
 
 def check_video_already_framming(video_id: str, frames_output_dir: str):
     # check if folder video already exist:
-    if not os.exists("{}/data_frames/{}".format(frames_output_dir, video_id)):
+    if not os.path.exists("{}/data_frames/{}".format(frames_output_dir, video_id)):
         return False
 
     # check if video folder contains image in pattern frame_[0-9]*.jpg
@@ -161,10 +161,13 @@ def video_extract_base_on_id(
         frames_output_dir=frames_output_dir
     )
     if need_framing:
+        logger.info("Need framing this video")
         # framing video base on id
         num_frames_in_video = framing_video_base_on_video_id(
             id=video_id, sec_per_frame=sec_per_frame, frames_output_dir=frames_output_dir
         )
+    else:
+        logger.info('All ready have video framed')
 
     base_dir = frames_output_dir + "/data_frames"
     list_features = []
