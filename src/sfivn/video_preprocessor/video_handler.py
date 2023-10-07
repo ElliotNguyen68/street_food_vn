@@ -154,6 +154,7 @@ def video_extract_base_on_id(
     video_id: str,
     frames_output_dir: str,
     extract_function: Callable,
+    feature:str,
     sec_per_frame: int = 1,
 ) -> pd.DataFrame:
     
@@ -189,4 +190,7 @@ def video_extract_base_on_id(
         list_features.append(value)
         list_frames.append("{}_{}".format(video_id, frame_no))
 
-    return pd.DataFrame({"frame_no": list_frames, "features": list_features})
+    df_result=pd.DataFrame({"frame_no": list_frames, "features": list_features})
+    df_result['feature_type']=feature
+    
+    return df_result
