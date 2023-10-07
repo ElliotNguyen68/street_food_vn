@@ -151,7 +151,7 @@ def check_video_already_framming(video_id: str, frames_output_dir: str):
     # if any filename not in format -> false
     return all(bool(re.search("^frame_[0-9]*\.jpg$", file_name)) for file_name in all_files)
 
-def video_extract_base_on_id_multiprocess(
+def _video_extract_base_on_id_multiprocess(
     video_id: str,
     frames_output_dir: str,
     extract_function: Callable,
