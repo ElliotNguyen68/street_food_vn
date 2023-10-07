@@ -147,11 +147,11 @@ def video_extract_base_on_id(
         id=video_id, sec_per_frame=sec_per_frame,frames_output_dir=frames_output_dir
     )
 
-    base_dir = frames_output_dir + "_frames"
+    base_dir = frames_output_dir + "/data_frames"
     list_features=[]
     list_frames=[]
     for frame_no in range(num_frames_in_video):
-        image_path = base_dir + "/frames_{}/{}".format(frame_no,video_id)
+        image_path = base_dir + "/{}/frames_{}".format(video_id,frame_no,)
         
         value = extract_function(image_path)
         list_features.append(value)
