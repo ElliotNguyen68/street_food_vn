@@ -140,11 +140,11 @@ def video_extract_base_on_id(
     video_id: str,
     frames_output_dir: str,
     extract_function: Callable,
-    sec_per_frames:int= 1,
+    sec_per_frame:int= 1,
     *args
 )->pd.DataFrame:
     num_frames_in_video = framing_video_base_on_video_id(
-        id=video_id, sec_per_frames=sec_per_frames
+        id=video_id, sec_per_frame=sec_per_frame
     )
 
     base_dir = frames_output_dir + "_frames"
