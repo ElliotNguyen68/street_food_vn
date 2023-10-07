@@ -147,7 +147,7 @@ def check_video_already_framming(video_id: str, frames_output_dir: str):
     all_files = os.listdir(frames_path)
 
     # if any filename not in format -> false
-    return all(bool(re.search("^frame_[0-9]*$", file_name)) for file_name in all_files)
+    return all(bool(re.search("^frame_[0-9]*\.jpg$", file_name)) for file_name in all_files)
 
 
 def video_extract_base_on_id(
