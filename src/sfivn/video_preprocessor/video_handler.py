@@ -157,11 +157,11 @@ def video_extract_base_on_id(
     sec_per_frame: int = 1,
 ) -> pd.DataFrame:
     
-    need_framing=check_video_already_framming(
+    exist_frames=check_video_already_framming(
         video_id=video_id,
         frames_output_dir=frames_output_dir
     )
-    if need_framing:
+    if not exist_frames:
         logger.info("Need framing this video")
         # framing video base on id
         num_frames_in_video = framing_video_base_on_video_id(
