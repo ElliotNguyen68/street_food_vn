@@ -1,7 +1,8 @@
 import os
 import math
 import shutil
-from typing import Any,Callable
+from typing import Any, Callable
+import re
 
 
 import cv2
@@ -118,7 +119,7 @@ def framing_video_base_on_video_id(
     frames_output_dir: str,
     sec_per_frame: int = 1,
     remove_video_after_framings: bool = True,
-)->int:
+) -> int:
     name_video = download_video(
         video_id=id,
         output_dir=frames_output_dir + "_video",
@@ -129,40 +130,54 @@ def framing_video_base_on_video_id(
         num_sec_per_image=sec_per_frame,
         output_images_directory=frames_output_dir + "_frames",
     )
- 
+
     if remove_video_after_framings:
         shutil.rmtree(frames_output_dir + "_video")
-     
+
     return num_frames_extracted
+
+
+def check_video_already_framming(video_id: str, frames_output_dir: str):
+    # check if folder video already exist:
+    if not os.exists("{}/data_frames/{}".format(frames_output_dir, video_id)):
+        return False
+
+    # check if video folder contains image in pattern frame_[0-9]*.jpg
+    all_files = os.listdir("{}/data_frames/{}".format(frames_output_dir, video_id))
+
+    # if any filename not in format -> false
+    return all(bool(re.search("^frame_[0-9]*$", file_name)) for file_name in all_files)
 
 
 def video_extract_base_on_id(
     video_id: str,
     frames_output_dir: str,
     extract_function: Callable,
-    sec_per_frame:int= 1,
-    *args
-)->pd.DataFrame:
-    num_frames_in_video = framing_video_base_on_video_id(
-        id=video_id, sec_per_frame=sec_per_frame,frames_output_dir=frames_output_dir
+    sec_per_frame: int = 1,
+) -> pd.DataFrame:
+    
+    need_framing=check_video_already_framming(
+        video_id=video_id,
+        frames_output_dir=frames_output_dir
     )
+    if need_framing:
+        # framing video base on id
+        num_frames_in_video = framing_video_base_on_video_id(
+            id=video_id, sec_per_frame=sec_per_frame, frames_output_dir=frames_output_dir
+        )
 
     base_dir = frames_output_dir + "/data_frames"
-    list_features=[]
-    list_frames=[]
+    list_features = []
+    list_frames = []
+    # go to each frame and do feature extract base on extract_function
     for frame_no in range(num_frames_in_video):
-        image_path = base_dir + "/{}/frames_{}.jpg".format(video_id,frame_no,)
-        
+        image_path = base_dir + "/{}/frame_{}.jpg".format(
+            video_id,
+            frame_no,
+        )
+
         value = extract_function(image_path)
         list_features.append(value)
-        list_frames.append('{}_{}'.format(video_id,frame_no))
-        
-    return pd.DataFrame(
-        {
-            'frame_no':list_frames,
-            'features':list_features
-        }
-    )
-        
-    
-        
+        list_frames.append("{}_{}".format(video_id, frame_no))
+
+    return pd.DataFrame({"frame_no": list_frames, "features": list_features})
