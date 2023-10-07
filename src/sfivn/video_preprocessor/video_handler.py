@@ -139,7 +139,7 @@ def framing_video_base_on_video_id(
 
 def check_video_already_framming(video_id: str, frames_output_dir: str):
     # check if folder video already exist:
-    frames_path="{}/data_frames/{}".format(frames_output_dir, video_id)
+    frames_path="{}_frames/{}".format(frames_output_dir, video_id)
     if not os.path.exists(frames_path):
         return False
 
@@ -168,14 +168,14 @@ def video_extract_base_on_id(
             id=video_id, sec_per_frame=sec_per_frame, frames_output_dir=frames_output_dir
         )
     else:
+        logger.info('Already have video framed')
         num_frames_in_video=len(
             os.listdir(
-               "{}/data_frames/{}".format(frames_output_dir, video_id) 
+               "{}_frames/{}".format(frames_output_dir, video_id) 
             )
         )
-        logger.info('All ready have video framed')
 
-    base_dir = frames_output_dir + "/data_frames"
+    base_dir = frames_output_dir + "_frames"
     list_features = []
     list_frames = []
     # go to each frame and do feature extract base on extract_function
