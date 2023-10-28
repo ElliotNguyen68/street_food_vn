@@ -125,7 +125,90 @@ def extract_feature(image_path:str,classes,labels_IO,labels_attribute,W_attribut
             key:value for key,value in zip(idx[:get_top_only],probs[:get_top_only])
         },
     )
+  
+  
+def extract_feature_full(image_path:str,classes,labels_IO,labels_attribute,W_attribute,model,tf,get_top_only:int=20)->Tuple[float,List[float],List[str]]:
+    features_blobs = []
     
+    img = Image.open(image_path)
+    input_img = V(tf(img).unsqueeze(0))
+
+    # forward pass
+    logit = model.forward(input_img)
+    h_x = F.softmax(logit, 1).data.squeeze()
+    probs, idx = h_x.sort(0, True)
+    probs = probs.numpy()
+    idx = idx.numpy()
+
+    # logger.info('RESULT ON ' + img_url)
+
+# output the IO prediction
+    io_image = np.mean(labels_IO[idx[:10]]) # vote for the indoor or outdoor
+    if io_image < 0.5:
+        logger.info('--TYPE OF ENVIRONMENT: indoor')
+    else:
+        logger.info('--TYPE OF ENVIRONMENT: outdoor')
+
+    # output the prediction of scene category
+    logger.info('--SCENE CATEGORIES:')
+    for i in range(0, 5):
+        logger.info('{:.3f} -> {}'.format(probs[i], classes[idx[i]]))
+
+    # output the scene attributes
+    # responses_attribute = W_attribute.dot(features_blobs[1])
+    # idx_a = np.argsort(responses_attribute)
+    # logger.info('--SCENE ATTRIBUTES:')
+    # scences_attributes=[labels_attribute[idx_a[i]] for i in range(-1,-10,-1)]
+    # logger.info(', '.join(scences_attributes))
+
+
+
+    return (
+        io_image,
+        probs.tolist()
+    )
+    
+# classes, labels_IO, labels_attribute, W_attribute = load_labels()
+
+# # load the model
+
+# features_blobs = []
+# model = load_model()
+
+# # load the transformer
+# tf = returnTF() # image transformer
+
+# # get the softmax weight
+# params = list(model.parameters())
+# weight_softmax = params[-2].data.numpy()
+# weight_softmax[weight_softmax<0] = 0
+
+# # load the test image
+# # img_url = 'http://places.csail.mit.edu/demo/6.jpg'
+# # os.system('wget %s -q -O test.jpg' % img_url)
+# img = Image.open('../data/images/7JJfJgyHYwU/frame_24.jpg')
+# input_img = V(tf(img).unsqueeze(0))
+
+# # forward pass
+# logit = model.forward(input_img)
+# h_x = F.softmax(logit, 1).data.squeeze()
+# probs, idx = h_x.sort(0, True)
+# probs = probs.numpy()
+# idx = idx.numpy()
+
+# # logger.info('RESULT ON ' + img_url)
+
+# # output the IO prediction
+# io_image = np.mean(labels_IO[idx[:10]]) # vote for the indoor or outdoor
+# if io_image < 0.5:
+#     logger.info('--TYPE OF ENVIRONMENT: indoor')
+# else:
+#     logger.info('--TYPE OF ENVIRONMENT: outdoor')
+
+# # output the prediction of scene category
+# logger.info('--SCENE CATEGORIES:')
+# for i in range(0, 5):
+#     logger.info('{:.3f} -> {}'.format(probs[i], classes[idx[i]]))  
 # classes, labels_IO, labels_attribute, W_attribute = load_labels()
 
 # # load the model
