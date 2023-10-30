@@ -136,11 +136,11 @@ def extract_feature_full(
 
     zip_percentage_segment = [(key, value) for key, value in zip(unique_values, counts)]
 
-    zip_percentage_segment_sorted = sorted(
-        zip_percentage_segment, key=lambda x: x[1], reverse=True
-    )
+    # zip_percentage_segment_sorted = sorted(
+    #     zip_percentage_segment, key=lambda x: x[1], reverse=True
+    # )
     
-    get_list_tuple= zip_percentage_segment_sorted[:]
+    get_list_tuple= zip_percentage_segment[:]
     return {
         key: value for key,value in get_list_tuple
     }
