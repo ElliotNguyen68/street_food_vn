@@ -135,7 +135,7 @@ def extract_feature_full(
     counts /= num_pixel
 
     zip_percentage_segment = [(key, value) for key, value in zip(unique_values, counts)]
-
+    logger.info("No scenes : {}".format(len(zip_percentage_segment)))
     # zip_percentage_segment_sorted = sorted(
     #     zip_percentage_segment, key=lambda x: x[1], reverse=True
     # )
