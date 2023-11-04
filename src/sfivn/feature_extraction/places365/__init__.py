@@ -100,15 +100,15 @@ def extract_feature(image_path:str,classes,labels_IO,labels_attribute,W_attribut
 
 # output the IO prediction
     io_image = np.mean(labels_IO[idx[:10]]) # vote for the indoor or outdoor
-    if io_image < 0.5:
-        logger.info('--TYPE OF ENVIRONMENT: indoor')
-    else:
-        logger.info('--TYPE OF ENVIRONMENT: outdoor')
+    # if io_image < 0.5:
+    #     logger.info('--TYPE OF ENVIRONMENT: indoor')
+    # else:
+    #     logger.info('--TYPE OF ENVIRONMENT: outdoor')
 
-    # output the prediction of scene category
-    logger.info('--SCENE CATEGORIES:')
-    for i in range(0, 5):
-        logger.info('{:.3f} -> {}'.format(probs[i], classes[idx[i]]))
+    # # output the prediction of scene category
+    # logger.info('--SCENE CATEGORIES:')
+    # for i in range(0, 5):
+    #     logger.info('{:.3f} -> {}'.format(probs[i], classes[idx[i]]))
 
     # output the scene attributes
     # responses_attribute = W_attribute.dot(features_blobs[1])
