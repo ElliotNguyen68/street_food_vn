@@ -136,14 +136,15 @@ def extract_feature_full(image_path:str,classes,labels_IO,labels_attribute,W_att
     # forward pass
     logit = model.forward(input_img)
     h_x = F.softmax(logit, 1).data.squeeze()
-    # probs, idx = h_x.sort(0, True)
+    probs_, idx_ = h_x.sort(0, True)
+    
     probs = h_x.numpy()
     # idx = idx.numpy()
 
     # logger.info('RESULT ON ' + img_url)
 
 # output the IO prediction
-    io_image = np.mean(labels_IO[idx[:10]]) # vote for the indoor or outdoor
+    io_image = np.mean(labels_IO[idx_[:10]]) # vote for the indoor or outdoor
     # if io_image < 0.5:
     #     logger.info('--TYPE OF ENVIRONMENT: indoor')
     # else:
@@ -160,8 +161,6 @@ def extract_feature_full(image_path:str,classes,labels_IO,labels_attribute,W_att
     # logger.info('--SCENE ATTRIBUTES:')
     # scences_attributes=[labels_attribute[idx_a[i]] for i in range(-1,-10,-1)]
     # logger.info(', '.join(scences_attributes))
-
-
 
     return (
         io_image,
