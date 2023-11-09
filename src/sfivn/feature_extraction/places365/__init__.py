@@ -136,9 +136,9 @@ def extract_feature_full(image_path:str,classes,labels_IO,labels_attribute,W_att
     # forward pass
     logit = model.forward(input_img)
     h_x = F.softmax(logit, 1).data.squeeze()
-    probs, idx = h_x.sort(0, True)
-    probs = probs.numpy()
-    idx = idx.numpy()
+    # probs, idx = h_x.sort(0, True)
+    probs = h_x.numpy()
+    # idx = idx.numpy()
 
     # logger.info('RESULT ON ' + img_url)
 
