@@ -272,7 +272,7 @@ def video_audio_extract_base_on_id(
     video=VideoFileClip(os.path.join(audio_file_output_dir,video_id))
     audio=video.audio
     audio.write_audiofile(
-        os.path.join(audio_file_output_dir,video_id)
+        "{}.wav".format(os.path.join(audio_file_output_dir,video_id))
     )
     
     
