@@ -3,3 +3,5 @@ pytube==15.0.0
 opencv-python==4.8.1.78
 scipy==1.10.1
 tensorflow_hub==0.15.0
+google
+google-cloud
