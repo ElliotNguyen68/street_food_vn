@@ -265,6 +265,8 @@ def video_audio_extract_base_on_id(
     audio_file_output_dir:str,
     temp_dir:str='/tmp'
 ):
+    if os.path.exists(audio_file_output_dir)==False:
+        os.mkdir(audio_file_output_dir)
     download_video(video_id=video_id,output_dir=temp_dir)
     
     video=VideoFileClip(os.path.join(audio_file_output_dir,video_id))
