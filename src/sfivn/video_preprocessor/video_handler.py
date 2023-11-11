@@ -267,7 +267,7 @@ def video_audio_extract_base_on_id(
 ):
     download_video(video_id=video_id,output_dir=temp_dir)
     
-    video=VideoFileClip(os.path.join(audio_file_output_dir,video))
+    video=VideoFileClip(os.path.join(audio_file_output_dir,video_id))
     audio=video.audio
     audio.write_audiofile(
         os.path.join(audio_file_output_dir,video_id)
