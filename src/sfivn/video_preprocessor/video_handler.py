@@ -5,7 +5,7 @@ from typing import Any, Callable
 import re
 from multiprocessing import Pool, Manager
 
-
+from moviepy.editor import VideoFileClip
 import cv2
 from pytube import YouTube
 from loguru import logger
@@ -259,3 +259,19 @@ def video_extract_base_on_id(
         df_result[FEATURE_COL] = feature
 
     return df_result
+
+def video_audio_extract_base_on_id(
+    video_id: str,
+    audio_file_output_dir:str,
+    temp_dir:str='/tmp'
+):
+    download_video(video_id=video_id,output_dir=temp_dir)
+    
+    video=VideoFileClip(os.path.join(audio_file_output_dir,video))
+    audio=video.audio
+    audio.write_audiofile(
+        os.path.join(audio_file_output_dir,video_id)
+    )
+    
+    
+    
