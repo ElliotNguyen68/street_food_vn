@@ -31,6 +31,7 @@ def handle_audio_file_to_numpy(file_path:str)->np.ndarray:
 
 def init_module():
     model = hub.load(MODEL_PATH)
+    return model
 
 def extract_feature_full(audio_file_path:str,model)->List[float]:
     
