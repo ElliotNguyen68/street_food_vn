@@ -8,6 +8,8 @@ import numpy as np
 import csv
 from scipy.io import wavfile
 import scipy
+from loguru import logger
+
 
 
 MODEL_PATH="https://www.kaggle.com/models/google/yamnet/frameworks/TensorFlow2/variations/yamnet/versions/1"
@@ -18,7 +20,12 @@ def ensure_sample_rate(original_sample_rate, waveform,
   if original_sample_rate != desired_sample_rate:
     desired_length = int(round(float(len(waveform)) /
                                original_sample_rate * desired_sample_rate))
-    waveform = scipy.signal.resample(waveform, desired_length)
+    try:
+        waveform = scipy.signal.resample(waveform, desired_length)
+    except Exception as e:
+        logger.debug(e) 
+        from scipy import signal
+        waveform = signal.resample(waveform, desired_length) 
   return desired_sample_rate, waveform
 
 
