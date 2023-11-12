@@ -9,6 +9,10 @@ import csv
 from scipy.io import wavfile
 import scipy
 from loguru import logger
+try:
+    from scipy import signal
+except:
+    import scipy.signal as signal
 
 
 
@@ -20,12 +24,7 @@ def ensure_sample_rate(original_sample_rate, waveform,
   if original_sample_rate != desired_sample_rate:
     desired_length = int(round(float(len(waveform)) /
                                original_sample_rate * desired_sample_rate))
-    try:
-        waveform = scipy.signal.resample(waveform, desired_length)
-    except Exception as e:
-        logger.debug(e) 
-        from scipy import signal
-        waveform = signal.resample(waveform, desired_length) 
+    waveform = signal.resample(waveform, desired_length)
   return desired_sample_rate, waveform
 
 
